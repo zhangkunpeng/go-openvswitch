@@ -195,6 +195,18 @@ func (v *VSwitchGetService) Interface(ifi string, key string) (string, error) {
 	return strings.TrimSpace(string(out)), nil
 }
 
+// Port gets configuration for a port and returns the values through
+// string.
+func (v *VSwitchGetService) Port(port string, key string) (string, error) {
+	args := []string{"--format=json", "get", "port", port, key}
+	out, err := v.v.exec(args...)
+	if err != nil {
+		return "", err
+	}
+
+	return strings.TrimSpace(string(out)), nil
+}
+
 // A VSwitchSetService is used in a VSwitchService to execute 'ovs-vsctl set'
 // subcommands.
 type VSwitchSetService struct {
