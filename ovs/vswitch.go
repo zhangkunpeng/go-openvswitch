@@ -51,12 +51,8 @@ func (v *VSwitchService) AddBridge(bridge string) error {
 
 // AddPort attaches a port to a bridge on Open vSwitch.  The port may or may
 // not already exist.
-func (v *VSwitchService) AddPort(bridge string, port string, options ...PortOptions) error {
-	args := []string{"--may-exist", "add-port", bridge, port}
-	for _, opt := range options {
-		args = append(args, opt.slice()...)
-	}
-	_, err := v.exec(args...)
+func (v *VSwitchService) AddPort(bridge string, port string) error {
+	_, err := v.exec("--may-exist", "add-port", bridge, string(port))
 	return err
 }
 
@@ -220,6 +216,18 @@ func (v *VSwitchSetService) Bridge(bridge string, options BridgeOptions) error {
 	// Prepend command line arguments before expanding options slice
 	// and appending it
 	args := []string{"set", "bridge", bridge}
+	args = append(args, options.slice()...)
+
+	_, err := v.v.exec(args...)
+	return err
+}
+
+// Port sets configuration for a port using the values from a PortOptions
+// struct.
+func (v *VSwitchSetService) Port(port string, options PortOptions) error {
+	// Prepend command line arguments before expanding options slice
+	// and appending it
+	args := []string{"set", "port", port}
 	args = append(args, options.slice()...)
 
 	_, err := v.v.exec(args...)
