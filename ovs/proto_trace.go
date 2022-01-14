@@ -41,8 +41,6 @@ var (
 	ctResumeFromRegexp    = regexp.MustCompile(`Resuming from table`)
 	ctResumeWithRegexp    = regexp.MustCompile(`resume conntrack with`)
 	tunNative             = regexp.MustCompile(`native tunnel`)
-
-	pushVLANPattern = `push_vlan(vid=[0-9]+,pcp=[0-9]+)`
 )
 
 const (
@@ -141,6 +139,7 @@ type ProtoTrace struct {
 	FinalFlow       *DataPathFlows
 	DataPathActions DataPathActions
 	FlowActions     []string
+	RawOutput       []byte
 }
 
 // UnmarshalText unmarshals ProtoTrace text into a ProtoTrace type.
